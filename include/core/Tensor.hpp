@@ -9,8 +9,8 @@ using namespace std;
 class Tensor
 {
 private:
-    vector<size_t> shape_;   // Forma del tensor (ejemplo: {2, 3} para una matriz 2x3)
-    vector<float> data_;     // Datos del tensor (almacenados en un vector plano)
+    vector<size_t> shape_; // Forma del tensor (ejemplo: {2, 3} para una matriz 2x3)
+    vector<float> data_; // Datos del tensor (almacenados en un vector plano)
     vector<size_t> strides_; // Strides para acceder a los datos eficientemente
 
     // Calcula los strides para acceder eficientemente a los elementos
@@ -69,8 +69,7 @@ public:
     }
 
     // Constructor que recibe la forma y los datos iniciales
-    Tensor(const vector<size_t> &shape, const vector<float> &data)
-    {
+    Tensor(const vector<size_t>& shape, const vector<float>& data) {
         this->shape_ = shape; // Inicializa la forma del tensor
         this->data_ = data;   // Inicializa los datos del tensor
         size_t total_elements = 1;
@@ -92,16 +91,13 @@ public:
     }
 
     // Devuelve los datos del tensor (como un vector plano)
-    const vector<float> &getData() const
-    {
+    const vector<float>& getData() const {
         return data_;
     }
 
     // Accede al elemento del tensor usando un vector de índices. Ejemplo com matriz 3 x 5 x 2
-    float at(const vector<size_t> &indices) const
-    {
-        if (indices.size() != shape_.size())
-        {
+    float at(const vector<size_t>& indices) const { 
+        if (indices.size() != shape_.size()) {
             throw out_of_range("Número incorrecto de índices.");
         }
         size_t offset = 0;
@@ -117,10 +113,8 @@ public:
     }
 
     // Accede al elemento del tensor usando un vector de índices (para modificar)
-    float &at(const vector<size_t> &indices)
-    {
-        if (indices.size() != shape_.size())
-        {
+    float& at(const vector<size_t>& indices) {
+        if (indices.size() != shape_.size()) {
             throw out_of_range("Número incorrecto de índices.");
         }
         size_t offset = 0;
