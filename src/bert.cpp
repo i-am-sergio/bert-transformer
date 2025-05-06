@@ -1,7 +1,7 @@
 #include "bert.hpp"
 
 BERT::BERT(){
-    this->message = "BERT esta vivo!"; 
+    this->message = "========== BERT esta vivo! =========="; 
 }
 
 void BERT::printMessage() {
