@@ -69,7 +69,7 @@ public:
     }
 
     // Constructor que recibe la forma y los datos iniciales
-    Tensor(const vector<size_t>& shape, const vector<double>& data) {
+    Tensor(const vector<size_t>& shape, const vector<float>& data) {
         this->shape_ = shape; // Inicializa la forma del tensor
         this->data_ = data;   // Inicializa los datos del tensor
         size_t total_elements = 1;
@@ -91,12 +91,12 @@ public:
     }
 
     // Devuelve los datos del tensor (como un vector plano)
-    const vector<double>& getData() const {
+    const vector<float>& getData() const {
         return data_;
     }
 
     // Accede al elemento del tensor usando un vector de índices. Ejemplo com matriz 3 x 5 x 2
-    double at(const vector<size_t>& indices) const { 
+    float at(const vector<size_t>& indices) const { 
         if (indices.size() != shape_.size()) {
             throw out_of_range("Número incorrecto de índices.");
         }
@@ -113,7 +113,7 @@ public:
     }
 
     // Accede al elemento del tensor usando un vector de índices (para modificar)
-    double& at(const vector<size_t>& indices) {
+    float& at(const vector<size_t>& indices) {
         if (indices.size() != shape_.size()) {
             throw out_of_range("Número incorrecto de índices.");
         }

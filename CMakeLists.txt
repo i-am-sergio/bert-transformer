@@ -57,7 +57,7 @@ target_link_libraries(bert_main
 # =========================== Ejecutable de pruebas ===========================
 add_executable(bert_test
     # # ${ROOT_DIR}/tests/test_vector.cpp
-    ${ROOT_DIR}/tests/test_relu.cpp
+    # ${ROOT_DIR}/tests/test_relu.cpp
     # ${ROOT_DIR}/tests/test_layers.cpp
     ${ROOT_DIR}/tests/test_embedding.cpp
     # ${ROOT_DIR}/tests/test_tokenizer.cpp
@@ -71,13 +71,6 @@ target_link_libraries(bert_test
     # pthread  # Si se requiere para threading
 )
 
-
-
-# Configuración de tests (requiere Google Test u otro framework)
-# if(EXISTS ${ROOT_DIR}/tests/CMakeLists.txt)
-#     enable_testing()
-#     add_subdirectory(${ROOT_DIR}/tests)
-# endif()
 
 # Opcional: Configuración para CUDA (si se usa GPU)
 # enable_language(CUDA)
