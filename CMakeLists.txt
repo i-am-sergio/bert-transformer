@@ -56,9 +56,9 @@ target_link_libraries(bert_main
 
 # =========================== Ejecutable de pruebas ===========================
 add_executable(bert_test
-    ${ROOT_DIR}/tests/test_vector.cpp
+    # ${ROOT_DIR}/tests/test_vector.cpp
     # ${ROOT_DIR}/tests/test_layers.cpp
-    # ${ROOT_DIR}/tests/test_embedding.cpp
+    ${ROOT_DIR}/tests/test_embedding.cpp
     # ${ROOT_DIR}/tests/test_tokenizer.cpp
     # ${ROOT_DIR}/tests/test_bert.cpp
     # ${ROOT_DIR}/tests/test_utils.cpp
