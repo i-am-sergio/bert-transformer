@@ -1,5 +1,11 @@
 ## Modelo BERT Transformer
 
+### Alumnos:
+- Sergio Mogollón Cáceres
+- Braulio Maldonado Casilla
+- Paul Parizaca
+- Nelzon APaza
+
 BERT (Bidirectional Encoder Representations from Transformers) es un modelo de **transformer pre-entrenado** que revolucionó el campo del Procesamiento del Lenguaje Natural (NLP). Su principal innovación radica en su capacidad para entender el **contexto bidireccional** de las palabras en una oración. A diferencia de modelos anteriores que procesaban el texto de izquierda a derecha o de derecha a izquierda, BERT considera ambas direcciones simultáneamente.
 
 Imagina que estás leyendo la frase: "El banco del río estaba lleno de peces" y "Fui al banco a retirar dinero". Para entender el significado de la palabra "banco" en cada caso, necesitas observar las palabras que la rodean tanto a la izquierda como a la derecha. BERT aprende a hacer esto de manera efectiva.
