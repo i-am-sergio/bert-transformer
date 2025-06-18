@@ -5,8 +5,11 @@ class BERT {
 private:
     std::string message;
 public:
-    BERT(); // Declaración del constructor
+    BERT(){
+        this->message = "========== BERT esta vivo! =========="; 
+    }
     // Otras declaraciones de métodos (si los hay)
-    void printMessage();
-
+    void printMessage(){
+        std::cout << message << std::endl;
+    }
 };
