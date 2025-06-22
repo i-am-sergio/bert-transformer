@@ -52,6 +52,25 @@ public:
     // Devuelve el numero total de elementos en el tensor
     size_t get_size() const { return data.size(); }
 
+    // Transposición de matrices 2D
+    Tensor transpose() const {
+        if (shape.size() != 2) {
+            throw std::runtime_error("La transposicion solo para tensores 2D.");
+        }
+
+        size_t rows = shape[0];
+        size_t cols = shape[1];
+        Tensor transposed({cols, rows});
+
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                transposed({j, i}) = (*this)({i, j});
+            }
+        }
+
+        return transposed;
+    }
+
     // Sobrecarga del operador << para imprimir el tensor
     friend ostream &operator<<(ostream &os, const Tensor &tensor) {
         streambuf* old_buf = cout.rdbuf();

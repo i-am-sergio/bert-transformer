@@ -10,6 +10,7 @@ testtokenizer
 test_tokenizer
 test_embedding
 test_positionalencode
+test_multiheadattention
 testattention
 testreader
 testembedding
