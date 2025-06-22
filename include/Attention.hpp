@@ -3,8 +3,8 @@
 
 
 Tensor batch_matmul(const Tensor &A, const Tensor &B, bool transpose_B = false) {
-    auto A_shape = A.get_shape(); // [batch, M, K]
-    auto B_shape = B.get_shape(); // [batch, N, K] si transpuesta -> [batch, K, N]
+    auto A_shape = A.shape; // [batch, M, K]
+    auto B_shape = B.shape; // [batch, N, K] si transpuesta -> [batch, K, N]
 
     size_t batch = A_shape[0];
     size_t M = A_shape[1];
@@ -32,7 +32,7 @@ Tensor batch_matmul(const Tensor &A, const Tensor &B, bool transpose_B = false) 
 
 
 Tensor softmax(const Tensor& input) {
-    auto shape = input.get_shape(); // [batch, seq_len, seq_len]
+    auto shape = input.shape; // [batch, seq_len, seq_len]
     Tensor output(shape);
 
     size_t batch = shape[0];
@@ -61,11 +61,11 @@ Tensor softmax(const Tensor& input) {
 
 
 Tensor attention(const Tensor& Q, const Tensor& K, const Tensor& V) {
-    size_t d_k = Q.get_shape()[2];
+    size_t d_k = Q.shape[2];
     float scale = 1.0f / sqrt(d_k);
 
     Tensor scores = batch_matmul(Q, K, true); // Q * K^T
-    for (auto& val : scores.get_data())
+    for (auto& val : scores.data)
         val *= scale;
 
     Tensor probs = softmax(scores);
