@@ -5,11 +5,17 @@
 testneuralnetwork
 cnn
 main
-test
 mlp
+testtokenizer
+testattention
+testreader
+testembedding
+testselfattention
+testtransformerblock
 
 # models
 models
 
 # datasets
 datasets
+vocabulary.bin

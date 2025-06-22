@@ -25,6 +25,14 @@ public:
         compute_strides();
     }
 
+    Tensor(initializer_list<size_t> shape_) : shape(shape_) {
+        size_t total_size = 1;
+        for (auto dim : shape)
+            total_size *= dim;
+        data.resize(total_size);
+        compute_strides();
+    }
+
     // Acceso a elementos mediante indices (version modificable)
     float &operator()(const vector<size_t> &indices) {
         return data[compute_offset(indices)];
@@ -36,27 +44,13 @@ public:
     }
 
     // Rellena todo el tensor con un valor
-    void fill(float value) {
-        std::fill(data.begin(), data.end(), value);
-    }
-
-    // Imprime los datos en forma lineal (1D)
-    void printLinear() const {
-        for (const auto &val : data)
-            cout << val << " ";
-        cout << endl;
-    }
+    void fill(float value) { std::fill(data.begin(), data.end(), value); }
 
     // Imprime el tensor con formato segun su dimensionalidad
-    void print() const {
-        print_recursive(0, 0);
-        cout << endl;
-    }
+    void print() const { print_recursive(0, 0); cout << endl; }
 
     // Devuelve el numero total de elementos en el tensor
-    size_t get_size() const {
-        return data.size();
-    }
+    size_t get_size() const { return data.size(); }
 
     // Sobrecarga del operador << para imprimir el tensor
     friend ostream &operator<<(ostream &os, const Tensor &tensor) {
@@ -112,8 +106,9 @@ private:
     }
 };
 
-// Sobrecarga para imprimir vectores de size_t
-inline ostream& operator<<(ostream& os, const vector<size_t>& vec) {
+// Imprimir vectores de cualquier tipo 
+template<typename T>
+inline ostream& operator<<(ostream& os, const vector<T>& vec) {
     os << "[";
     for (size_t i = 0; i < vec.size(); ++i) {
         os << vec[i];
@@ -123,4 +118,20 @@ inline ostream& operator<<(ostream& os, const vector<size_t>& vec) {
     }
     os << "]";
     return os;
+}
+
+// Sobrecarga del operador "+" para sumar dos tensores elemento por elemento
+Tensor operator+(const Tensor &tensorA, const Tensor &tensorB) {
+    if (tensorA.shape != tensorB.shape) {
+        throw invalid_argument("Tensors must have the same shape for addition.");
+    }
+    
+    Tensor result(tensorA.shape);
+
+    #pragma omp parallel for
+    for (size_t i = 0; i < tensorA.data.size(); ++i) {
+        result.data[i] = tensorA.data[i] + tensorB.data[i];
+    }
+
+    return result;
 }
