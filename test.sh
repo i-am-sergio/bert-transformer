@@ -5,7 +5,7 @@ if [ "$1" == "tokenizer" ]; then
 elif [ "$1" == "reader" ]; then
   g++ -std=c++17 testreader.cpp -I../include -o testreader && ./testreader
 elif [ "$1" == "embedding" ]; then
-  g++ -std=c++17 testembedding.cpp -I../include -o testembedding && ./testembedding
+  g++ -std=c++17 test_embedding.cpp -I../include -o test_embedding && ./test_embedding
 elif [ "$1" == "self" ]; then
   g++ -std=c++17 testselfattention.cpp -I../include -o testselfattention && ./testselfattention
 elif [ "$1" == "transformerblock" ]; then

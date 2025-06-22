@@ -8,6 +8,7 @@ main
 mlp
 testtokenizer
 test_tokenizer
+test_embedding
 testattention
 testreader
 testembedding
