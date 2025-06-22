@@ -10,11 +10,11 @@ elif [ "$1" == "posencode" ]; then
   g++ -std=c++17 test_positionalencode.cpp -I../include -o test_positionalencode && ./test_positionalencode
 elif [ "$1" == "mha" ]; then
   g++ -std=c++17 test_multiheadattention.cpp -I../include -o test_multiheadattention && ./test_multiheadattention
-elif [ "$1" == "self" ]; then
-  g++ -std=c++17 testselfattention.cpp -I../include -o testselfattention && ./testselfattention
-elif [ "$1" == "transformerblock" ]; then
-  g++ -std=c++17 testtransformerblock.cpp -I../include -o testtransformerblock && ./testtransformerblock
+elif [ "$1" == "encoder" ]; then
+  g++ -std=c++17 test_transformer_encoder.cpp -I../include -o test_transformer_encoder && ./test_transformer_encoder
+elif [ "$1" == "bert" ]; then
+  g++ -std=c++17 test_bert.cpp -I../include -o test_bert && ./test_bert
 else
-  echo "Uso: $0 [tokenizer|reader|embedding]"
+  echo "Uso: $0 [tokenizer|reader|embedding|posencode|mha|encoder|bert]"
   exit 1
 fi

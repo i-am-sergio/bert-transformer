@@ -71,6 +71,33 @@ public:
         return transposed;
     }
 
+    // Método para obtener un slice del tensor
+    Tensor slice(const vector<size_t>& indices) const {
+        // Para tensores 3D, indices debería ser {b, s} para obtener un vector en esa posición
+        if (indices.size() != shape.size() - 1) {
+            throw invalid_argument("Invalid number of indices for slice");
+        }
+
+        size_t last_dim = shape.back();
+        Tensor result({last_dim});
+        
+        // Calcular el offset base
+        size_t offset = 0;
+        for (size_t i = 0; i < indices.size(); ++i) {
+            if (indices[i] >= shape[i]) {
+                throw out_of_range("Index out of range in slice");
+            }
+            offset += indices[i] * strides[i];
+        }
+        
+        // Copiar los datos
+        for (size_t i = 0; i < last_dim; ++i) {
+            result.data[i] = data[offset + i];
+        }
+        
+        return result;
+    }
+
     // Sobrecarga del operador << para imprimir el tensor
     friend ostream &operator<<(ostream &os, const Tensor &tensor) {
         streambuf* old_buf = cout.rdbuf();

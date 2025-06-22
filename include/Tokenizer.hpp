@@ -46,6 +46,8 @@ public:
         cout << "Vocabulario cargado: " << vocab.size() << " sub-palabras." << endl;
     }
 
+    size_t get_vocab_size() const { return vocab.size(); }
+
     // Tokenizar una frase usando WordPiece
     vector<string> tokenize(const string &text) {
         vector<string> tokens;
