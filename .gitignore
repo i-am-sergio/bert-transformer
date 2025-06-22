@@ -9,6 +9,7 @@ mlp
 testtokenizer
 test_tokenizer
 test_embedding
+test_positionalencode
 testattention
 testreader
 testembedding
