@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$1" == "mlp" ]; then
-  g++ -fopenmp -O3 -std=c++17 main.cpp -Iinclude -o main && ./main
+  g++ -fopenmp -O3 -std=c++17 mlp.cpp -Iinclude -o mlp && ./mlp
 elif [ "$1" == "cnn" ]; then
   g++ -fopenmp -O3 -std=c++17 cnn.cpp -Iinclude -o cnn && ./cnn
 elif [ "$1" == "testcnn" ]; then

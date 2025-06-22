@@ -6,6 +6,10 @@ testneuralnetwork
 cnn
 main
 test
+mlp
 
 # models
 models
+
+# datasets
+datasets
