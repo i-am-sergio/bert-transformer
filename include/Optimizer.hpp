@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Tensor.hpp"
+
 #include <vector>
 #include <string>
 #include <map>
@@ -56,7 +58,7 @@ public:
             v_it->second.fill(0.0f);
         }
 
-        auto& v_data = v_it->second.get_data();     // Referencia directa a los datos de v
+        auto& v_data = v_it->second.data;     // Referencia directa a los datos de v
         const size_t size = param_data.size();
         const float one_minus_beta = 1.0f - beta;   // Precomputamos para eficiencia
 
@@ -87,7 +89,7 @@ public:
         const float* param_key = param_data.data();
         
         // Inicialización de momentos
-        if (m_moments[param_key].get_data().empty()) {
+        if (m_moments[param_key].data.empty()) {
             m_moments[param_key] = Tensor({param_data.size()});
             v_moments[param_key] = Tensor({param_data.size()});
             m_moments[param_key].fill(0.0f);
@@ -95,8 +97,8 @@ public:
             t_steps[param_key] = 0;
         }
 
-        auto& m = m_moments[param_key].get_data();
-        auto& v = v_moments[param_key].get_data();
+        auto& m = m_moments[param_key].data;
+        auto& v = v_moments[param_key].data;
         int& t = t_steps[param_key];
         t++;
 
