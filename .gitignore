@@ -7,6 +7,7 @@ cnn
 main
 mlp
 testtokenizer
+test_tokenizer
 testattention
 testreader
 testembedding

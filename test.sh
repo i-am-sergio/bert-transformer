@@ -1,7 +1,7 @@
 #!/bin/bash
 cd test
 if [ "$1" == "tokenizer" ]; then
-  g++ -std=c++17 testtokenizer.cpp -I../include -o testtokenizer && ./testtokenizer
+  g++ -std=c++17 test_tokenizer.cpp -I../include -o test_tokenizer && ./test_tokenizer
 elif [ "$1" == "reader" ]; then
   g++ -std=c++17 testreader.cpp -I../include -o testreader && ./testreader
 elif [ "$1" == "embedding" ]; then
