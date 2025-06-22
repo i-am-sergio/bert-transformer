@@ -1,21 +1,22 @@
 #pragma once
+
 #include "Tensor.hpp"
-#include "Math.hpp"
 #include "Optimizer.hpp"
 
-#include <random>
-#include <algorithm>
-#include <cmath>
+// Clase base abstracta para todas las capas de una red neuronal
+class Layer {
+public:
+    virtual ~Layer() = default;
 
-class Layer { // Clase base abstracta para capas de red neuronal
-    public:
-    virtual ~Layer() = default; // Destructor virtual por defecto
+    // Procesa la entrada y devuelve la salida de la capa
+    virtual Tensor forward(const Tensor& input) = 0;
 
-    virtual Tensor forward(const Tensor& input) = 0;      // Propagacion hacia adelante (funcion pura)
-    virtual Tensor backward(const Tensor& grad_output) = 0; // Propagacion hacia atras (funcion pura)
-    virtual void update_parameters(Optimizer& optimizer) = 0; // Actualizar pesos (funcion pura)
-    virtual void print() const = 0;                     // Imprimir capa 
+    // Calcula los gradientes respecto a la entrada y pesos
+    virtual Tensor backward(const Tensor& grad_output) = 0;
+
+    // Actualiza los parámetros usando el optimizador
+    virtual void update_parameters(Optimizer& optimizer) = 0;
+
+    // Reinicia los gradientes acumulados a cero
     virtual void zero_grad() = 0;
 };
-
-
