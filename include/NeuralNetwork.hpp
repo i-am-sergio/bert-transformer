@@ -129,7 +129,7 @@ public:
 
         std::ofstream log_file;
         if (training_logs) {
-            log_file.open("log_" + to_string(epochs) + "ep.txt");
+            log_file.open("logs_" + to_string(epochs) + "epochs.txt");
             log_file << "Epoch,Train_Loss,Train_Accuracy,Valid_Loss,Valid_Accuracy\n";
         }
 

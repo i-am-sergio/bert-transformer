@@ -1,4 +1,11 @@
 /build
 .vscode
 
+# executables
 testneuralnetwork
+cnn
+main
+test
+
+# models
+models
