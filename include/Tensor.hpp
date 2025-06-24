@@ -107,6 +107,29 @@ public:
         return os;
     }
 
+    Tensor operator*(float scalar) const {
+        Tensor result(shape);
+        for (size_t i = 0; i < data.size(); ++i) {
+            result.data[i] = data[i] * scalar;
+        }
+        return result;
+    }
+
+    Tensor reshape(const vector<size_t>& new_shape) const {
+        size_t new_size = 1;
+        for (auto dim : new_shape) {
+            new_size *= dim;
+        }
+        
+        if (new_size != data.size()) {
+            throw runtime_error("El nuevo tamaño debe coincidir con el tamaño original");
+        }
+        
+        Tensor result(new_shape);
+        result.data = data; // Copiamos los datos
+        return result;
+    }
+
 private:
     // Calcula la posicion en el array lineal dado un conjunto de indices
     size_t compute_offset(const vector<size_t> &indices) const {
@@ -180,4 +203,9 @@ Tensor operator+(const Tensor &tensorA, const Tensor &tensorB) {
     }
 
     return result;
+}
+
+// También necesitamos esta versión para float * Tensor
+Tensor operator*(float scalar, const Tensor& tensor) {
+    return tensor * scalar;
 }

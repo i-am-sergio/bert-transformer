@@ -127,4 +127,12 @@ public:
             return unk_token;  // Si el id está fuera del rango, devolver [UNK]
         }
     }
+
+    // Truncar secuencia a una longitud máxima
+    vector<string> truncate_sequence(const vector<string>& tokens, size_t max_length) {
+        if (tokens.size() <= max_length) {
+            return tokens;
+        }
+        return vector<string>(tokens.begin(), tokens.begin() + max_length);
+    }
 };
