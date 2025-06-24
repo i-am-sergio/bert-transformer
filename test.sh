@@ -12,8 +12,8 @@ elif [ "$1" == "mha" ]; then
   g++ -std=c++17 test_multiheadattention.cpp -I../include -o test_multiheadattention && ./test_multiheadattention
 elif [ "$1" == "encoder" ]; then
   g++ -std=c++17 test_transformer_encoder.cpp -I../include -o test_transformer_encoder && ./test_transformer_encoder
-elif [ "$1" == "bert" ]; then
-  g++ -std=c++17 test_bert.cpp -I../include -o test_bert && ./test_bert
+elif [ "$1" == "test" ]; then
+  g++ -std=c++17 test.cpp -I../model -o test && ./test
 else
   echo "Uso: $0 [tokenizer|reader|embedding|posencode|mha|encoder|bert]"
   exit 1

@@ -1,0 +1,256 @@
+#pragma once
+
+#include <vector>
+#include <iostream>
+#include <cassert>
+#include <stdexcept>
+
+using namespace std;
+
+class Tensor {
+public:
+    vector<size_t> shape;   // Dimensiones del tensor (ej: [2,3] = matriz 2x3)
+    vector<size_t> strides; // Pasos para navegar entre elementos en memoria
+    vector<float> data;     // Datos almacenados en un array lineal
+
+    Tensor() {}
+
+    // Constructor con forma especifica
+    Tensor(const vector<size_t> &shape_) : shape(shape_) {
+        size_t total_size = 1;
+        for (auto dim : shape)
+            total_size *= dim;
+        data.resize(total_size);
+        compute_strides();
+    }
+
+    Tensor(initializer_list<size_t> shape_) : shape(shape_) {
+        size_t total_size = 1;
+        for (auto dim : shape)
+            total_size *= dim;
+        data.resize(total_size);
+        compute_strides();
+    }
+
+    // Acceso a elementos mediante indices (version modificable)
+    float &operator()(const vector<size_t> &indices) {
+        return data[compute_offset(indices)];
+    }
+
+    // Acceso a elementos mediante indices (version constante)
+    const float &operator()(const vector<size_t> &indices) const {
+        return data[compute_offset(indices)];
+    }
+
+    // Rellena todo el tensor con un valor
+    void fill(float value) { std::fill(data.begin(), data.end(), value); }
+
+    // Imprime el tensor con formato segun su dimensionalidad
+    void print() const { print_recursive(0, 0); cout << endl; }
+
+    // Devuelve el numero total de elementos en el tensor
+    size_t get_size() const { return data.size(); }
+
+    // Transposición de matrices 2D
+    Tensor transpose() const {
+        if (shape.size() != 2) {
+            throw std::runtime_error("La transposicion solo para tensores 2D.");
+        }
+
+        size_t rows = shape[0];
+        size_t cols = shape[1];
+        Tensor transposed({cols, rows});
+
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                transposed({j, i}) = (*this)({i, j});
+            }
+        }
+
+        return transposed;
+    }
+
+    // Método para obtener un slice del tensor
+    Tensor slice(const vector<size_t>& indices) const {
+        // Para tensores 3D, indices debería ser {b, s} para obtener un vector en esa posición
+        if (indices.size() != shape.size() - 1) {
+            throw invalid_argument("Invalid number of indices for slice");
+        }
+
+        size_t last_dim = shape.back();
+        Tensor result({last_dim});
+        
+        // Calcular el offset base
+        size_t offset = 0;
+        for (size_t i = 0; i < indices.size(); ++i) {
+            if (indices[i] >= shape[i]) {
+                throw out_of_range("Index out of range in slice");
+            }
+            offset += indices[i] * strides[i];
+        }
+        
+        // Copiar los datos
+        for (size_t i = 0; i < last_dim; ++i) {
+            result.data[i] = data[offset + i];
+        }
+        
+        return result;
+    }
+
+    // Sobrecarga del operador << para imprimir el tensor
+    friend ostream &operator<<(ostream &os, const Tensor &tensor) {
+        streambuf* old_buf = cout.rdbuf();
+        cout.rdbuf(os.rdbuf());
+        tensor.print_recursive(0, 0);
+        cout.rdbuf(old_buf);
+        return os;
+    }
+
+    Tensor operator*(float scalar) const {
+        Tensor result(shape);
+        for (size_t i = 0; i < data.size(); ++i) {
+            result.data[i] = data[i] * scalar;
+        }
+        return result;
+    }
+
+    Tensor reshape(const vector<size_t>& new_shape) const {
+        size_t new_size = 1;
+        for (auto dim : new_shape) {
+            new_size *= dim;
+        }
+        
+        if (new_size != data.size()) {
+            throw runtime_error("El nuevo tamaño debe coincidir con el tamaño original");
+        }
+        
+        Tensor result(new_shape);
+        result.data = data; // Copiamos los datos
+        return result;
+    }
+    
+    // Método para obtener la transpuesta de un tensor
+    Tensor transpose() const {
+        if (shape.size() != 2) {
+            throw std::runtime_error("La transposición solo está soportada para tensores 2D.");
+        }
+
+        size_t rows = shape[0];
+        size_t cols = shape[1];
+        Tensor transposed({cols, rows});  // La forma de la transposición será [cols, rows]
+
+        for (size_t i = 0; i < rows; ++i) {
+            for (size_t j = 0; j < cols; ++j) {
+                transposed({j, i}) = (*this)({i, j});  // Intercambiar filas y columnas
+            }
+        }
+
+        return transposed;
+    }
+
+private:
+    // Calcula la posicion en el array lineal dado un conjunto de indices
+    size_t compute_offset(const vector<size_t> &indices) const {
+        assert(indices.size() == shape.size());
+        size_t offset = 0;
+        for (size_t i = 0; i < shape.size(); ++i) {
+            if (indices[i] >= shape[i])
+                throw out_of_range("Index out of bounds");
+            offset += strides[i] * indices[i];
+        }
+        return offset;
+    }
+
+    // Calcula los pasos (strides) para navegar entre dimensiones
+    void compute_strides() {
+        strides.resize(shape.size());
+        size_t stride = 1;
+        for (int i = (int)shape.size() - 1; i >= 0; --i) {
+            strides[i] = stride;
+            stride *= shape[i];
+        }
+    }
+
+    // Imprime el tensor recursivamente con indentacion para formato
+    void print_recursive(size_t dim, size_t offset, size_t indent = 0) const {
+        if (dim == shape.size() - 1) {
+            cout << string(indent, ' ') << "[";
+            for (size_t i = 0; i < shape[dim]; ++i) {
+                cout << data[offset + i];
+                if (i + 1 < shape[dim])
+                    cout << ", ";
+            }
+            cout << "]";
+        } else {
+            cout << string(indent, ' ') << "[\n";
+            for (size_t i = 0; i < shape[dim]; ++i) {
+                print_recursive(dim + 1, offset + i * strides[dim], indent + 2);
+                if (i + 1 < shape[dim])
+                    cout << ",\n";
+            }
+            cout << "\n" << string(indent, ' ') << "]";
+        }
+    }
+};
+
+// Imprimir vectores de cualquier tipo 
+template<typename T>
+inline ostream& operator<<(ostream& os, const vector<T>& vec) {
+    os << "[";
+    for (size_t i = 0; i < vec.size(); ++i) {
+        os << vec[i];
+        if (i + 1 < vec.size()) {
+            os << ", ";
+        }
+    }
+    os << "]";
+    return os;
+}
+
+// Sobrecarga del operador "+" para sumar dos tensores elemento por elemento
+Tensor operator+(const Tensor &tensorA, const Tensor &tensorB) {
+    if (tensorA.shape != tensorB.shape) {
+        throw invalid_argument("Tensors must have the same shape for addition.");
+    }
+    
+    Tensor result(tensorA.shape);
+
+    #pragma omp parallel for
+    for (size_t i = 0; i < tensorA.data.size(); ++i) {
+        result.data[i] = tensorA.data[i] + tensorB.data[i];
+    }
+
+    return result;
+}
+
+// También necesitamos esta versión para float * Tensor
+Tensor operator*(float scalar, const Tensor& tensor) {
+    return tensor * scalar;
+}
+
+// Multiplicación de matrices (producto punto)
+Tensor operator*(const Tensor &A, const Tensor &B) {
+    // Verificar que las dimensiones sean compatibles para el producto de matrices
+    if (A.shape[2] != B.shape[1]) {
+        throw runtime_error("Las dimensiones no son compatibles para multiplicación de matrices.");
+    }
+
+    // Definir las dimensiones de la salida (producto punto)
+    Tensor result({A.shape[0], A.shape[1], B.shape[2]});  // [batch_size, sequence_length, head_dim]
+
+    // Multiplicación de matrices (producto punto)
+    for (size_t i = 0; i < A.shape[0]; ++i) {
+        for (size_t j = 0; j < A.shape[1]; ++j) {
+            for (size_t k = 0; k < B.shape[2]; ++k) {
+                result({i, j, k}) = 0.0f;
+                for (size_t l = 0; l < A.shape[2]; ++l) {
+                    result({i, j, k}) += A({i, j, l}) * B({i, l, k});
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+
